@@ -1,7 +1,9 @@
 mod config;
 mod models;
 mod services;
+mod routes;
 
+use actix_web::{web, App, HttpServer, middleware};
 use config::Config;
 use std::path::PathBuf;
 
@@ -25,8 +27,25 @@ async fn main() -> std::io::Result<()> {
 
     tracing::info!("Loaded {} contexts", config.contexts.len());
 
-    // 启动服务器 (占位)
-    tracing::info!("Server will start at {}:{}", config.server.host, config.server.port);
+    let bind_addr = format!("{}:{}", config.server.host, config.server.port);
+    tracing::info!("Starting server at {}", bind_addr);
 
-    Ok(())
+    // 启动 HTTP 服务器
+    HttpServer::new(move || {
+        App::new()
+            .app_data(web::Data::new(config.clone()))
+            .wrap(middleware::Logger::default())
+            .service(
+                web::scope("/api")
+                    .configure(routes::configure_health)
+                    .configure(routes::configure_contexts)
+                    .service(
+                        web::scope("/{context}")
+                            .configure(routes::configure_files)
+                    )
+            )
+    })
+    .bind(&bind_addr)?
+    .run()
+    .await
 }
