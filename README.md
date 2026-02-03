@@ -10,6 +10,29 @@
 - WebSocket 实时文件变更通知
 - 交互式终端会话（每连接独立 PTY）
 
+## 快速开始
+
+```bash
+# 克隆仓库
+git clone git@github.com:JhihJian/mdterm.git
+cd mdterm
+
+# 创建配置文件
+cp mdterm.toml.example mdterm.toml
+
+# 编辑配置（设置你要暴露的目录）
+vim mdterm.toml
+
+# 运行
+cargo run
+
+# 或使用发布版本（更快）
+cargo build --release
+./target/release/mdterm
+```
+
+服务启动后访问 `http://127.0.0.1:8080`
+
 ## 配置
 
 创建 `mdterm.toml`:
