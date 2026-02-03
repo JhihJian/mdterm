@@ -1,4 +1,6 @@
 mod config;
+mod models;
+mod services;
 
 use config::Config;
 use std::path::PathBuf;
