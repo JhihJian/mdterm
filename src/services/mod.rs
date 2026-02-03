@@ -1,8 +1,10 @@
 pub mod file;
 pub mod watch;
+pub mod terminal;
 
 pub use file::FileService;
 pub use watch::WatchService;
+pub use terminal::{PtySession, Sessions};
 
 #[cfg(test)]
 mod tests {
