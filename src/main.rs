@@ -35,12 +35,14 @@ async fn main() -> std::io::Result<()> {
     tracing::info!("Starting server at {}", bind_addr);
 
     let watchers: websocket::Watchers = Arc::new(Mutex::new(HashMap::new()));
+    let sessions: services::Sessions = Arc::new(Mutex::new(HashMap::new()));
 
     // 启动 HTTP 服务器
     HttpServer::new(move || {
         App::new()
             .app_data(web::Data::new(config.clone()))
             .app_data(web::Data::new(watchers.clone()))
+            .app_data(web::Data::new(sessions.clone()))
             .wrap(middleware::Logger::default())
             .service(
                 web::scope("/api")
@@ -52,6 +54,7 @@ async fn main() -> std::io::Result<()> {
                             .service(
                                 web::scope("/ws")
                                     .configure(websocket::configure_notify)
+                                    .configure(websocket::configure_terminal)
                             )
                     )
             )
