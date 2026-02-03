@@ -6,7 +6,6 @@
 
 ## 目录
 
-- [快速开始](#快速开始)
 - [REST API](#rest-api)
 - [WebSocket 协议](#websocket-协议)
 - [集成示例](#集成示例)
@@ -14,33 +13,11 @@
 
 ---
 
-## 快速开始
+## 服务地址
 
-### 1. 启动 Mdterm 服务
+默认运行在 `http://127.0.0.1:8080`
 
-```bash
-# 克隆仓库
-git clone git@github.com:JhihJian/mdterm.git
-cd mdterm
-
-# 创建配置文件
-cp mdterm.toml.example mdterm.toml
-
-# 编辑配置，设置你要暴露的目录
-vim mdterm.toml
-
-# 运行
-cargo run
-```
-
-服务默认运行在 `http://127.0.0.1:8080`
-
-### 2. 验证服务状态
-
-```bash
-curl http://127.0.0.1:8080/api/health
-# 响应: {"status":"ok"}
-```
+（服务启动方式请参考项目 [README](../README.md)）
 
 ---
 
