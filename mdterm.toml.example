@@ -1,0 +1,17 @@
+[server]
+host = "127.0.0.1"
+port = 8080
+
+[[contexts]]
+name = "docs"
+path = "/home/user/documents"
+description = "我的文档"
+command = "/bin/bash"
+
+[[contexts]]
+name = "notes"
+path = "/home/user/notes"
+description = "笔记目录"
+
+[contexts.env]
+EDITOR = "vim"
