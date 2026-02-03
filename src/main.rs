@@ -2,10 +2,14 @@ mod config;
 mod models;
 mod services;
 mod routes;
+mod websocket;
 
 use actix_web::{web, App, HttpServer, middleware};
 use config::Config;
 use std::path::PathBuf;
+use std::collections::HashMap;
+use std::sync::Arc;
+use tokio::sync::Mutex;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
@@ -30,10 +34,13 @@ async fn main() -> std::io::Result<()> {
     let bind_addr = format!("{}:{}", config.server.host, config.server.port);
     tracing::info!("Starting server at {}", bind_addr);
 
+    let watchers: websocket::Watchers = Arc::new(Mutex::new(HashMap::new()));
+
     // 启动 HTTP 服务器
     HttpServer::new(move || {
         App::new()
             .app_data(web::Data::new(config.clone()))
+            .app_data(web::Data::new(watchers.clone()))
             .wrap(middleware::Logger::default())
             .service(
                 web::scope("/api")
@@ -42,6 +49,10 @@ async fn main() -> std::io::Result<()> {
                     .service(
                         web::scope("/{context}")
                             .configure(routes::configure_files)
+                            .service(
+                                web::scope("/ws")
+                                    .configure(websocket::configure_notify)
+                            )
                     )
             )
     })
