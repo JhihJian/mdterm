@@ -37,7 +37,6 @@ async fn main() -> std::io::Result<()> {
     let watchers: websocket::Watchers = Arc::new(Mutex::new(HashMap::new()));
     let sessions: services::Sessions = Arc::new(Mutex::new(HashMap::new()));
 
-    // 启动 HTTP 服务器
     HttpServer::new(move || {
         App::new()
             .app_data(web::Data::new(config.clone()))
