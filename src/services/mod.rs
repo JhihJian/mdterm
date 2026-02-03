@@ -1,6 +1,8 @@
 pub mod file;
+pub mod watch;
 
 pub use file::FileService;
+pub use watch::WatchService;
 
 #[cfg(test)]
 mod tests {
